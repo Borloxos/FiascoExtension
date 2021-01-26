@@ -1,7 +1,7 @@
 # FiascoExtension
 
-This program attempts to optimize the encoding capabilities of the [FIASCO](https://github.com/l-tamas/Fiasco) image 
-and video codec by sharing references to domain images between multiple frames of a video file.
+This program attempts to optimize the encoding capabilities of the [FIASCO](https://github.com/l-tamas/Fiasco) image and
+video codec by sharing references to domain images between multiple frames of a video file.
 
 ## Usage
 
@@ -27,9 +27,9 @@ A FFmpeg installation with at version 4.3 or higher.
 
 ### FIASCO
 
-The cfiaco and dfiasco binaries at version 1.3. They can be built from [https://github.com/Borloxos/FiascoExtension]() 
-or [https://github.com/l-tamas/Fiasco](). In the latter case you probably have to tweak the source codes constants 
-to avoid crashes.
+The cfiaco and dfiasco binaries at version 1.3. They can be built from [https://github.com/Borloxos/FiascoExtension]()
+or [https://github.com/l-tamas/Fiasco](). In the latter case you probably have to tweak the source codes constants to
+avoid crashes.
 
 ## Parameters
 
@@ -46,7 +46,7 @@ to avoid crashes.
     - In case of encoding, the path where the encoded FIASCO file should be written to.
     - In case of decoding, the path where the decoded file should be written to. All file formats that are recognized by
       your FFmpeg version are applicable here.
-      
+
 - `-l | --layout`
     - Overrides the tiling layout used to tile videos to groups of pictures during encoding.
     - Overrides the tiling layout used to untile groups of pictures back into a video file during decoding.
@@ -56,6 +56,18 @@ to avoid crashes.
 - `-f | --fps`
     - Overrides the target fps of a decoded video file.
     - Default value: 25.
+
+- `ffmpegPath`
+    - Overrides the path that the ffmpeg binary is called from during encoding and decoding
+    - Default value: 'ffmpeg'
+
+- `cfiascoPath`
+    - Overrides the path that the cfiasco binary is called from during encoding
+    - Default value: 'cfiasco'
+
+- `dfiascoPath`
+    - Overrides the path that the dfiasco binary is called from during decoding
+    - Default value: 'dfiasco'
 
 - `--ffmpegArgs`
     - Additional arguments to be passed during the FFmpeg call when encoding of decoding.

@@ -8,13 +8,13 @@ import (
 )
 
 // Encode Splits a video file into a number of tiled .ppm image files containing the frames
-func Encode(input string, output string, layout string, args string) (matches int, err error) {
+func Encode(input string, output string, path string, layout string, args string) (matches int, err error) {
 	// TODO: save tiling layout and framerate in some way
 	var cmd *exec.Cmd
 	if args == "" {
-		cmd = exec.Command("ffmpeg", "-i", input, "-y", "-vf", "tile=layout="+layout, output)
+		cmd = exec.Command(path, "-i", input, "-y", "-vf", "tile=layout="+layout, output)
 	} else {
-		cmd = exec.Command("ffmpeg", "-i", input, "-y", "-vf", "tile=layout="+layout, output, args)
+		cmd = exec.Command(path, "-i", input, "-y", "-vf", "tile=layout="+layout, output, args)
 	}
 
 	// Verbosity
@@ -40,19 +40,18 @@ func Encode(input string, output string, layout string, args string) (matches in
 }
 
 // Decode Combines a number of tiled .ppm images containing frames into a video file
-func Decode(input string, output string, layout string, fps int, args string) error {
+func Decode(input string, output string, path string, layout string, fps int, args string) error {
 	// TODO: read tiling layout and target framerate from input files
 	// if '-f image2' isn't specified before the input file, ffmpeg fails to use wildcards correctly
 	// start_number is set to 0, because Fiasco starts its output files at 0
 	var cmd *exec.Cmd
 	if args == "" {
-		cmd = exec.Command("ffmpeg", "-f", "image2", "-i", input, "-y", "-vf", "untile="+layout+
+		cmd = exec.Command(path, "-f", "image2", "-i", input, "-y", "-vf", "untile="+layout+
 			",setpts=N/("+strconv.Itoa(fps)+"*TB)", "-start_number", "0", output)
 	} else {
-		cmd = exec.Command("ffmpeg", "-f", "image2", "-i", input, "-y", "-vf", "untile="+layout+
+		cmd = exec.Command(path, "-f", "image2", "-i", input, "-y", "-vf", "untile="+layout+
 			",setpts=N/("+strconv.Itoa(fps)+"*TB)", "-start_number", "0", output, args)
 	}
-
 
 	// Verbosity
 	cmd.Stderr = os.Stdout

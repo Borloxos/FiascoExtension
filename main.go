@@ -48,6 +48,21 @@ func main() {
 		Help:     "Target fps for the decoded video.",
 		Default:  25,
 	})
+	ffmpegPath := parser.String("", "ffmpegPath", &argparse.Options{
+		Required: false,
+		Help:     "Override the path to the ffmpeg binary.",
+		Default:  "ffmpeg",
+	})
+	cfiascoPath := parser.String("", "cfiascoPath", &argparse.Options{
+		Required: false,
+		Help:     "Override the path to the cfiasco binary.",
+		Default:  "cfiasco",
+	})
+	dfiascoPath := parser.String("", "dfiascoPath", &argparse.Options{
+		Required: false,
+		Help:     "Override the path to the dfiasco binary.",
+		Default:  "dfiasco",
+	})
 	ffmpegArgs := parser.String("", "ffmpegArgs", &argparse.Options{
 		Required: false,
 		Help:     "Additional arguments to append to the ffmpeg command.",
@@ -67,20 +82,23 @@ func main() {
 	switch *action {
 	case ActionEncode:
 		// Tile a given videos frames into .ppm files and store the number of produced files
-		matches, err := ffmpeg.Encode(*input, EncodingTempFilename+EncodingTempFFmpegWildcard+"."+EncodingTempExtension, *layout, *ffmpegArgs)
+		matches, err := ffmpeg.Encode(*input, EncodingTempFilename+EncodingTempFFmpegWildcard+"."+EncodingTempExtension,
+			*ffmpegPath, *layout, *ffmpegArgs)
 		if err != nil {
 			panic(err)
 		}
 
 		// Encode tiled files into 1 .fco file
-		err = fiasco.Encode(fmt.Sprintf(EncodingTempFilename+EncodingTempFiascoWildcard+"."+EncodingTempExtension, matches), *output, *fiascoArgs)
+		err = fiasco.Encode(fmt.Sprintf(EncodingTempFilename+EncodingTempFiascoWildcard+"."+EncodingTempExtension, matches),
+			*output, *cfiascoPath, *fiascoArgs)
 		cleanupCodingFiles()
 	case ActionDecode:
 		// Decode .fco compressed file into tiled .ppm files
-		err = fiasco.Decode(*input, EncodingTempFilename+"."+EncodingTempExtension, *fiascoArgs)
+		err = fiasco.Decode(*input, EncodingTempFilename+"."+EncodingTempExtension, *dfiascoPath, *fiascoArgs)
 
 		// Fiasco puts out files in the format of '[filename without extension].[sequence number].[extension]'
-		err = ffmpeg.Decode(fmt.Sprintf("%s.%%*.%s", EncodingTempFilename, EncodingTempExtension), *output, *layout, *fps, *ffmpegArgs)
+		err = ffmpeg.Decode(fmt.Sprintf("%s.%%*.%s", EncodingTempFilename, EncodingTempExtension),
+			*output, *ffmpegPath, *layout, *fps, *ffmpegArgs)
 		cleanupCodingFiles()
 	}
 }
