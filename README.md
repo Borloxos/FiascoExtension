@@ -1,18 +1,35 @@
 # FiascoExtension
 
+This program attempts to optimize the encoding capabilities of the [FIASCO](https://github.com/l-tamas/Fiasco) image 
+and video codec by sharing references to domain images between multiple frames of a video file.
+
 ## Usage
 
-### Encode
+### Basic Encoding
 
 ```shell
 FiascoExtension -a encode -i video.mp4 -o encoded.fco
 ```
 
-### Decode
+### Basic Decoding
 
 ```shell
 FiascoExtension -a decode -i encoded.fco -o video.mp4
 ```
+
+## Requirements
+
+The following prerequisites have to be met, to run this program successfully.
+
+### FFmpeg
+
+A FFmpeg installation with at version 4.3 or higher.
+
+### FIASCO
+
+The cfiaco and dfiasco binaries at version 1.3. They can be built from [https://github.com/Borloxos/FiascoExtension]() 
+or [https://github.com/l-tamas/Fiasco](). In the latter case you probably have to tweak the source codes constants 
+to avoid crashes.
 
 ## Parameters
 
