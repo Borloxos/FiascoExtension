@@ -4,12 +4,18 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 )
 
 // Encode Splits a video file into a number of tiled .ppm image files containing the frames
-func Encode(input string, output string) (matches int, err error) {
+func Encode(input string, output string, layout string, args string) (matches int, err error) {
 	// TODO: save tiling layout and framerate in some way
-	cmd := exec.Command("ffmpeg", "-i", input, "-y", "-vf", "tile=layout=4x1", output)
+	var cmd *exec.Cmd
+	if args == "" {
+		cmd = exec.Command("ffmpeg", "-i", input, "-y", "-vf", "tile=layout="+layout, output)
+	} else {
+		cmd = exec.Command("ffmpeg", "-i", input, "-y", "-vf", "tile=layout="+layout, output, args)
+	}
 
 	// Verbosity
 	cmd.Stderr = os.Stdout
@@ -34,11 +40,19 @@ func Encode(input string, output string) (matches int, err error) {
 }
 
 // Decode Combines a number of tiled .ppm images containing frames into a video file
-func Decode(input string, output string) error {
+func Decode(input string, output string, layout string, fps int, args string) error {
 	// TODO: read tiling layout and target framerate from input files
 	// if '-f image2' isn't specified before the input file, ffmpeg fails to use wildcards correctly
 	// start_number is set to 0, because Fiasco starts its output files at 0
-	cmd := exec.Command("ffmpeg", "-f", "image2", "-i", input, "-y", "-vf", "untile=4x1,setpts=N/(25*TB)", "-start_number", "0", output)
+	var cmd *exec.Cmd
+	if args == "" {
+		cmd = exec.Command("ffmpeg", "-f", "image2", "-i", input, "-y", "-vf", "untile="+layout+
+			",setpts=N/("+strconv.Itoa(fps)+"*TB)", "-start_number", "0", output)
+	} else {
+		cmd = exec.Command("ffmpeg", "-f", "image2", "-i", input, "-y", "-vf", "untile="+layout+
+			",setpts=N/("+strconv.Itoa(fps)+"*TB)", "-start_number", "0", output, args)
+	}
+
 
 	// Verbosity
 	cmd.Stderr = os.Stdout

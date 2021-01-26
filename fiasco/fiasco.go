@@ -6,9 +6,14 @@ import (
 )
 
 // Encode Encodes several files matching with the input pattern in fiasco
-func Encode(input string, output string) error {
+func Encode(input string, output string, args string) error {
 	// Only encode to I-Frames for now, as the default pattern causes crashes while decoding
-	cmd := exec.Command("cfiasco", "-V", "2", "-i", input, "-o", output, "--pattern=I")
+	var cmd *exec.Cmd
+	if args == "" {
+		cmd = exec.Command("cfiasco", "-V", "2", "-i", input, "-o", output, "--pattern=I")
+	} else {
+		cmd = exec.Command("cfiasco", "-V", "2", "-i", input, "-o", output, "--pattern=I", args)
+	}
 
 	// Verbose
 	cmd.Stderr = os.Stdout
@@ -22,8 +27,13 @@ func Encode(input string, output string) error {
 }
 
 // Decode Decodes a fiasco file
-func Decode(input string, output string) error {
-	cmd := exec.Command("dfiasco", "-o", output, input)
+func Decode(input string, output string, args string) error {
+	var cmd *exec.Cmd
+	if args == "" {
+		cmd = exec.Command("dfiasco", "-o", output, input)
+	} else {
+		cmd = exec.Command("dfiasco", "-o", output, input, args)
+	}
 
 	// Verbose
 	cmd.Stderr = os.Stdout
