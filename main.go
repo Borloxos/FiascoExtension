@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/akamensky/argparse"
 	"os"
-	"strings"
+	"path/filepath"
 )
 
 const (
@@ -14,7 +14,7 @@ const (
 	ActionDecode = "decode"
 
 	EncodingTempFilename       = "out/frame"
-	EncodingTempExtension      = ".ppm"
+	EncodingTempExtension      = "ppm"
 	EncodingTempFiascoWildcard = "[001-%03d+1]"
 	EncodingTempFFmpegWildcard = "%03d"
 )
@@ -42,22 +42,35 @@ func main() {
 	switch *action {
 	case ActionEncode:
 		// Tile a given videos frames into .ppm files and store the number of produced files
-		matches, err := ffmpeg.Encode(*input, EncodingTempFilename+EncodingTempFFmpegWildcard+EncodingTempExtension)
+		matches, err := ffmpeg.Encode(*input, EncodingTempFilename+EncodingTempFFmpegWildcard+"."+EncodingTempExtension)
 		if err != nil {
 			panic(err)
 		}
 
 		// Encode tiled files into 1 .fco file
-		err = fiasco.Encode(fmt.Sprintf(EncodingTempFilename+EncodingTempFiascoWildcard+EncodingTempExtension, matches), *output)
+		err = fiasco.Encode(fmt.Sprintf(EncodingTempFilename+EncodingTempFiascoWildcard+"."+EncodingTempExtension, matches), *output)
+		cleanupCodingFiles()
 	case ActionDecode:
 		// Decode .fco compressed file into tiled .ppm files
-		err = fiasco.Decode(*input, *output)
-
-		// Separate filename and extension
-		splitPath := strings.Split(*output, ".")
-		filename, extension := strings.Join(splitPath[:len(splitPath)-1], "."), splitPath[len(splitPath)-1]
+		err = fiasco.Decode(*input, EncodingTempFilename+"."+EncodingTempExtension)
 
 		// Fiasco puts out files in the format of '[filename without extension].[sequence number].[extension]'
-		err = ffmpeg.Decode(fmt.Sprintf("%s.%%*.%s", filename, extension), *output)
+		err = ffmpeg.Decode(fmt.Sprintf("%s.%%*.%s", EncodingTempFilename, EncodingTempExtension), *output)
+		cleanupCodingFiles()
+	}
+}
+
+// cleanupCodingFiles Removes all temporary files that are produced during encoding/decoding
+func cleanupCodingFiles() {
+	files, err := filepath.Glob(EncodingTempFilename + "*." + EncodingTempExtension)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	for _, f := range files {
+		err := os.Remove(f)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 }

@@ -1,6 +1,10 @@
 # GoLand files
 .idea
 
+# Build files
+FiascoExtension
+
 # Media files
-video.mp4
 out/*
+*.mp4
+*.fco
