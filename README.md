@@ -23,7 +23,7 @@ The following prerequisites have to be met, to run this program successfully.
 
 ### FFmpeg
 
-A FFmpeg installation with at version 4.3 or higher.
+A FFmpeg installation at version 4.3 or higher.
 
 ### FIASCO
 
@@ -51,30 +51,30 @@ avoid crashes.
     - Overrides the tiling layout used to tile videos to groups of pictures during encoding.
     - Overrides the tiling layout used to untile groups of pictures back into a video file during decoding.
     - Format: `\d+x\d+`, where the first number is the width and the second number is the height of the tiling layout.
-    - Default value: '4x1'.
+    - Default value: `4x1`.
 
 - `-f | --fps`
     - Overrides the target fps of a decoded video file.
-    - Default value: 25.
+    - Default value: `25`.
 
 - `ffmpegPath`
-    - Overrides the path that the ffmpeg binary is called from during encoding and decoding
-    - Default value: 'ffmpeg'
+    - Overrides the path that the ffmpeg binary is called from during encoding and decoding.
+    - Default value: `ffmpeg`.
 
 - `cfiascoPath`
-    - Overrides the path that the cfiasco binary is called from during encoding
-    - Default value: 'cfiasco'
+    - Overrides the path that the cfiasco binary is called from during encoding.
+    - Default value: `cfiasco`.
 
 - `dfiascoPath`
-    - Overrides the path that the dfiasco binary is called from during decoding
-    - Default value: 'dfiasco'
+    - Overrides the path that the dfiasco binary is called from during decoding.
+    - Default value: `dfiasco`.
 
 - `--ffmpegArgs`
     - Additional arguments to be passed during the FFmpeg call when encoding of decoding.
-    - Appended at the end of the call as-is.
+    - Appended directly after the binary as-is.
     - See [FFmpeg docomentation](https://ffmpeg.org/ffmpeg.html) for details.
 
 - `--fiascoArgs`
     - Additional arguments to be passed during the FIASCO call when encoding of decoding.
-    - Appended at the end of the call as-is.
+    - Appended directly after the binary as-is.
     - See FIASCO man-pages for details.
