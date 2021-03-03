@@ -41,7 +41,7 @@ func main() {
 		Validate: validateLayout,
 		Help: "Layout to tile the picture groups in. Specified in the format '4x1', where the first number is the " +
 			"width and the second number is the height of the tiling.",
-		Default: "4x1",
+		Default: "8x1",
 	})
 	fps := parser.Int("f", "fps", &argparse.Options{
 		Required: false,

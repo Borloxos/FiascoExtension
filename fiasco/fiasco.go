@@ -8,7 +8,7 @@ import (
 // Encode Encodes several files matching with the input pattern in fiasco
 func Encode(input string, output string, path string, customArgs string) error {
 	// Only encode to I-Frames for now, as the default pattern causes crashes while decoding
-	args := []string{"-V", "2", "-i", input, "-o", output, "--pattern=I"}
+	args := []string{"-V", "2", "-q", "100", "-i", input, "-o", output, "--pattern=I"}
 	if customArgs != "" {
 		args = append([]string{customArgs}, args...)
 	}
