@@ -5,6 +5,5 @@
 FiascoExtension
 
 # Media files
-out/*
 *.mp4
 *.fco
