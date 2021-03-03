@@ -41,7 +41,7 @@ func main() {
 		Validate: validateLayout,
 		Help: "Layout to tile the picture groups in. Specified in the format '4x1', where the first number is the " +
 			"width and the second number is the height of the tiling.",
-		Default: "8x1",
+		Default: "1x8",
 	})
 	fps := parser.Int("f", "fps", &argparse.Options{
 		Required: false,
@@ -66,12 +66,10 @@ func main() {
 	ffmpegArgs := parser.String("", "ffmpegArgs", &argparse.Options{
 		Required: false,
 		Help:     "Additional arguments to append to the ffmpeg command.",
-		Default:  "",
 	})
 	fiascoArgs := parser.String("", "fiascoArgs", &argparse.Options{
 		Required: false,
 		Help:     "Additional arguments to append to the fiasco command.",
-		Default:  "",
 	})
 
 	err := parser.Parse(os.Args)
@@ -88,7 +86,7 @@ func main() {
 			panic(err)
 		}
 
-		// Encode tiled files into 1 .fco file
+		// Encode tiled files into one .fco file that is named according to the naming constants
 		err = fiasco.Encode(fmt.Sprintf(EncodingTempFilename+EncodingTempFiascoWildcard+"."+EncodingTempExtension, matches),
 			*output, *cfiascoPath, *fiascoArgs)
 		cleanupCodingFiles()
@@ -118,6 +116,7 @@ func cleanupCodingFiles() {
 	}
 }
 
+// validateLayout Checks if a given tiling layout has the correct format
 func validateLayout(args []string) error {
 	if len(args) <= 0 {
 		return errors.New("no layout parameter specified")

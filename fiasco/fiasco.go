@@ -13,8 +13,7 @@ func Encode(input string, output string, path string, customArgs string) error {
 		args = append([]string{customArgs}, args...)
 	}
 
-	var cmd *exec.Cmd
-	cmd = exec.Command(path, args...)
+	cmd := exec.Command(path, args...)
 
 	// Verbose
 	cmd.Stderr = os.Stdout
@@ -34,8 +33,7 @@ func Decode(input string, output string, path string, customArgs string) error {
 		args = append([]string{customArgs}, args...)
 	}
 
-	var cmd *exec.Cmd
-	cmd = exec.Command(path, args...)
+	cmd := exec.Command(path, args...)
 
 	// Verbose
 	cmd.Stderr = os.Stdout

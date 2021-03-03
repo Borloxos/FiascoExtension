@@ -9,14 +9,12 @@ import (
 
 // Encode Splits a video file into a number of tiled .ppm image files containing the frames
 func Encode(input string, output string, path string, layout string, customArgs string) (matches int, err error) {
-	// TODO: save tiling layout and framerate in some way
 	args := []string{"-i", input, "-y", "-vf", "tile=layout=" + layout, output}
 	if customArgs != "" {
 		args = append([]string{customArgs}, args...)
 	}
 
-	var cmd *exec.Cmd
-	cmd = exec.Command(path, args...)
+	cmd := exec.Command(path, args...)
 
 	// Verbosity
 	cmd.Stderr = os.Stdout
@@ -42,7 +40,6 @@ func Encode(input string, output string, path string, layout string, customArgs 
 
 // Decode Combines a number of tiled .ppm images containing frames into a video file
 func Decode(input string, output string, path string, layout string, fps int, customArgs string) error {
-	// TODO: read tiling layout and target framerate from input files
 	// if '-f image2' isn't specified before the input file, ffmpeg fails to use wildcards correctly
 	// start_number is set to 0, because Fiasco starts its output files at 0
 	args := []string{"-f", "image2", "-i", input, "-y", "-vf", "untile=" + layout + ",setpts=N/(" + strconv.Itoa(fps) + "*TB)", "-start_number", "0", output}
@@ -50,8 +47,7 @@ func Decode(input string, output string, path string, layout string, fps int, cu
 		args = append([]string{customArgs}, args...)
 	}
 
-	var cmd *exec.Cmd
-	cmd = exec.Command(path, args...)
+	cmd := exec.Command(path, args...)
 
 	// Verbosity
 	cmd.Stderr = os.Stdout

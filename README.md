@@ -1,6 +1,6 @@
 # FiascoExtension
 
-This program attempts to optimize the encoding capabilities of the [FIASCO](https://github.com/l-tamas/Fiasco) image and
+This program attempts to extend the encoding capabilities of the [FIASCO](https://github.com/l-tamas/Fiasco) image and
 video codec by sharing references to domain images between multiple frames of a video file.
 
 ## Usage
@@ -28,7 +28,7 @@ A FFmpeg installation at version 4.3 or higher.
 ### FIASCO
 
 The cfiaco and dfiasco binaries at version 1.3. They can be built from [https://github.com/Borloxos/FiascoExtension]()
-or [https://github.com/l-tamas/Fiasco](). In the latter case you probably have to tweak the source codes constants to
+or [https://github.com/l-tamas/Fiasco](). In the latter case you may have to tweak the source codes constants to
 avoid crashes.
 
 ## Parameters
@@ -50,8 +50,9 @@ avoid crashes.
 - `-l | --layout`
     - Overrides the tiling layout used to tile videos to groups of pictures during encoding.
     - Overrides the tiling layout used to untile groups of pictures back into a video file during decoding.
-    - Format: `\d+x\d+`, where the first number is the width and the second number is the height of the tiling layout.
-    - Default value: `4x1`.
+    - Higher values result in longer encoding times, but better visual quality and compression.
+    - Format: `\d+x\d+`, where the first number is the width, and the second number is the height of the tiling layout.
+    - Default value: `1x8`.
 
 - `-f | --fps`
     - Overrides the target fps of a decoded video file.
