@@ -17,7 +17,7 @@ const (
 
 	EncodingTempFilename       = "out/frame"
 	EncodingTempExtension      = "ppm"
-	EncodingTempFiascoWildcard = "[001-%03d+1]"
+	EncodingTempFiascoWildcard = "[%03d-%03d+1]"
 	EncodingTempFFmpegWildcard = "%03d"
 )
 
@@ -35,6 +35,11 @@ func main() {
 	output := parser.String("o", "output", &argparse.Options{
 		Required: true,
 		Help:     "Output file to encode/decode to.",
+	})
+	threads := parser.Int("t", "threads", &argparse.Options{
+		Required: false,
+		Help:     "Number of cfiasco threads used during encoding.",
+		Default:  "16",
 	})
 	layout := parser.String("l", "layout", &argparse.Options{
 		Required: false,
@@ -87,15 +92,15 @@ func main() {
 		}
 
 		// Encode tiled files into one .fco file that is named according to the naming constants
-		err = fiasco.Encode(fmt.Sprintf(EncodingTempFilename+EncodingTempFiascoWildcard+"."+EncodingTempExtension, matches),
-			*output, *cfiascoPath, *fiascoArgs)
+		err = fiasco.Encode(EncodingTempFilename+EncodingTempFiascoWildcard+"."+EncodingTempExtension,
+			*output, *threads, matches, *cfiascoPath, *fiascoArgs)
 		cleanupCodingFiles()
 	case ActionDecode:
 		// Decode .fco compressed file into tiled .ppm files
-		err = fiasco.Decode(*input, EncodingTempFilename+"."+EncodingTempExtension, *dfiascoPath, *fiascoArgs)
+		err = fiasco.Decode(*input, EncodingTempFilename+"."+EncodingTempExtension, *threads, *dfiascoPath, *fiascoArgs)
 
 		// Fiasco puts out files in the format of '[filename without extension].[sequence number].[extension]'
-		err = ffmpeg.Decode(fmt.Sprintf("%s.%%*.%s", EncodingTempFilename, EncodingTempExtension),
+		err = ffmpeg.Decode(fmt.Sprintf("%s.%%*.%%*.%s", EncodingTempFilename, EncodingTempExtension),
 			*output, *ffmpegPath, *layout, *fps, *ffmpegArgs)
 		cleanupCodingFiles()
 	}
