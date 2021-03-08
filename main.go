@@ -39,7 +39,7 @@ func main() {
 	threads := parser.Int("t", "threads", &argparse.Options{
 		Required: false,
 		Help:     "Number of cfiasco threads used during encoding.",
-		Default:  "16",
+		Default:  16,
 	})
 	layout := parser.String("l", "layout", &argparse.Options{
 		Required: false,
