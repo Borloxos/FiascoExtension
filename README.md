@@ -5,6 +5,12 @@ video codec by sharing references to domain images between multiple frames of a 
 
 ## Usage
 
+### Building the Project
+
+```shell
+go build
+```
+
 ### Basic Encoding
 
 ```shell
@@ -20,6 +26,10 @@ FiascoExtension -a decode -i encoded.fco -o video.mp4
 ## Requirements
 
 The following prerequisites have to be met, to run this program successfully.
+
+### Go
+
+A Golang recent Golang installation.
 
 ### FFmpeg
 
