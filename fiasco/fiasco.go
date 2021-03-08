@@ -20,9 +20,10 @@ func Encode(inputTemplate string, outputTemplate string, threads int, matches in
 	var wg sync.WaitGroup
 
 	for i := 1; i <= threads; i++ {
-		// Add remaining files to last thread
-		if i == threads {
-			end += rest
+		// Add 1 of the rest frames to current thread if there are any remaining
+		if rest > 0 {
+			end++
+			rest--
 		}
 
 		// Insert start and end into input file name
